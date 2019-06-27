@@ -1,0 +1,6 @@
+# Config file for flake8
+
+[flake8]
+ignore = E,W,F841
+show-source = True
+max-line-length = 95

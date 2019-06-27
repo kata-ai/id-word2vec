@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+
+##########################################################################
+# Copyright 2019 Kata.ai
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
+import os
+
+from sacred import Experiment
+from sacred.observers import MongoObserver
+
+ex = Experiment(name='id-word2vec-print-analogy-vocab')
+
+# Setup Mongo observer
+mongo_url = os.getenv('SACRED_MONGO_URL')
+db_name = os.getenv('SACRED_DB_NAME')
+if mongo_url is not None and db_name is not None:
+    ex.observers.append(MongoObserver.create(url=mongo_url, db_name=db_name))
+
+
+@ex.config
+def default():
+    # path to analogy file
+    path = 'analogy.txt'
+    # file encoding to use
+    encoding = 'utf-8'
+    # whether to lowercase words
+    lower = True
+
+
+@ex.capture
+def get_vocab_from_line(line, lower=True):
+    if lower:
+        line = line.lower()
+
+    vocab = set()
+    for ws in line.split():
+        for w in ws.split('/'):
+            vocab.add(w)
+
+    return vocab
+
+
+@ex.automain
+def print_vocab(path, encoding='utf-8'):
+    """Print vocabulary of the given analogy file."""
+    vocab = set()
+    with open(path, encoding=encoding) as f:
+        for line in f:
+            if line.startswith(':'):
+                continue  # skip section title
+            vocab.update(get_vocab_from_line(line.strip()))
+
+    for w in sorted(vocab):
+        print(w)

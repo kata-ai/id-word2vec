@@ -1,0 +1,36 @@
+name: id-word2vec
+channels:
+- conda-forge
+- defaults
+- pytorch
+dependencies:
+- beautifulsoup4=4.6.3
+- cython=0.29.2
+- dill=0.2.7.1
+- flake8=3.6.0
+- gensim=3.4.0
+- jupyter=1.0.0
+- jupyterlab=0.35.4
+- lxml=4.2.5
+- mypy=0.660
+- nltk=3.2.5
+- numpy=1.15.4
+- pandas=0.23.4
+- pymongo=3.7.1
+- python=3.6.7
+- pytorch=0.3.1
+- scikit-learn=0.19.1
+- scrapy=1.5.1
+- spacy=2.0.18
+- tqdm=4.28.1
+- yapf=0.24.0
+# Uncomment this for Linux
+# - libgcc=7.2.0
+- pip:
+    - camel==0.1.2
+    - flake8-mypy==17.8.0
+    - pytorch-crf==0.5.1
+    - sacred==0.7.4
+    - torchtext==0.2.3
+    - git+https://github.com/tagucci/pythonrouge.git@7aeda94#egg=pythonrouge
+    - git+https://github.com/pytorch/tnt.git@464aa4#egg=torchnet
